@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 
 DATA = {
     'omlet': {
@@ -18,6 +18,13 @@ DATA = {
     },
     # можете добавить свои рецепты ;)
 }
+
+def calculate(request, dish):
+    servings = request.GET.get("servings", 1)
+    for key, value in DATA[dish].items():
+        DATA[dish][key] = value * int(servings)
+    context = {'recipe': DATA[dish]}
+    return HttpResponse(render(request, 'calculator/index.html', context))
 
 # Напишите ваш обработчик. Используйте DATA как источник данных
 # Результат - render(request, 'calculator/index.html', context)
